@@ -1,16 +1,32 @@
 {
-  "name": "bookit",
+  "name": "@smsnm/bookit",
   "version": "0.0.0",
+  "author": "Samsonium",
+  "license": "MIT",
+  "private": false,
   "description": "BOOKit (Backend Object Oriented Kit) is a strongly typed backend framework based on OOP principles",
   "main": "dist/index.js",
   "types": "types/index.d.ts",
   "files": [
     "dist/*"
   ],
-  "author": "Samsonium",
-  "repository": {
-    "url": "git@github.com:Samsonium/bookit.git"
+  "keywords": [
+    "backend", "framework", "library",
+    "OOP", "object", "oriented", "programming",
+    "js", "javascript",
+    "ts", "typescript"
+  ],
+  "scripts": {
+    "test": ""
   },
-  "license": "MIT",
-  "private": false
+  "engines": {
+    "node": ">= 16.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Samsonium/bookit.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Samsonium/bookit/issues"
+  }
 }
