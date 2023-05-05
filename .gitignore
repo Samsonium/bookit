@@ -2,7 +2,13 @@
 
 # Exclude dirs
 !/src
+!/test
 
 # Exclude files
+!/.eslintignore
+!/.eslintrc.json
 !/.gitignore
+!/.prettierrc.json
+!/jest.config.json
 !/package.json
+!/tsconfig.json
