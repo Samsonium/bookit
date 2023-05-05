@@ -1,0 +1,16 @@
+{
+  "name": "bookit",
+  "version": "0.0.0",
+  "description": "BOOKit (Backend Object Oriented Kit) is a strongly typed backend framework based on OOP principles",
+  "main": "dist/index.js",
+  "types": "types/index.d.ts",
+  "files": [
+    "dist/*"
+  ],
+  "author": "Samsonium",
+  "repository": {
+    "url": "git@github.com:Samsonium/bookit.git"
+  },
+  "license": "MIT",
+  "private": false
+}
