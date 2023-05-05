@@ -1,6 +1,7 @@
 /*
 
 # Exclude dirs
+!/.github
 !/src
 !/test
 
