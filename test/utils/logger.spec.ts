@@ -1,7 +1,7 @@
 import Logger from '../../src/utils/Logger';
 import LogType from '../../src/utils/enums/LogType';
 
-describe('Logger class', () => {
+describe('utils/Logger class', () => {
 	
 	// Spy on console.log
 	let spy: jest.SpyInstance;
