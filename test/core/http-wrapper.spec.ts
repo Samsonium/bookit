@@ -1,5 +1,4 @@
 import HttpWrapper from '../../src/core/HttpWrapper';
-import { Server } from 'http';
 
 describe('core/HttpWrapper', () => {
 	let spy: jest.SpyInstance;
