@@ -1,6 +1,7 @@
 /*
 
 # Exclude dirs
+!/.github
 !/src
 !/test
 
@@ -11,4 +12,5 @@
 !/.prettierrc.json
 !/jest.config.json
 !/package.json
+!/package-lock.json
 !/tsconfig.json
