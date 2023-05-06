@@ -5,7 +5,9 @@
         "outDir": "./lib",
         "declaration": true,
         "declarationDir": "./types",
-        "noImplicitAny": true
+        "noImplicitAny": true,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true
     },
     "include": ["src"],
     "exclude": ["node_modules", "test"]
