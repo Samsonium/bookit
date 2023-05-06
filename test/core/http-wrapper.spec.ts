@@ -6,6 +6,8 @@ describe('core/HttpWrapper', () => {
 	afterEach(() => spy.mockRestore());
 	
 	test('Should initialize', () => expect(new HttpWrapper).toBeInstanceOf(HttpWrapper));
+	test('Has "isRunning" getter', () => expect(new HttpWrapper().isRunning).not.toBe(undefined));
+	test('Has "usingPort" getter', () => expect(new HttpWrapper().usingPort).not.toBe(undefined));
 	test('Has public field named "config"', () => {
 		const httpWrapper = new HttpWrapper();
 		expect(httpWrapper.config).toBeInstanceOf(Object);
@@ -14,7 +16,7 @@ describe('core/HttpWrapper', () => {
 		const httpWrapper = new HttpWrapper();
 		
 		// Common config
-		expect(httpWrapper.config.port).toBe(80);
+		expect(httpWrapper.config.port).toBe(8080);
 		expect(httpWrapper.config.logs).toBe(false);
 		
 		// Requests config
@@ -31,22 +33,17 @@ describe('core/HttpWrapper', () => {
 	test('Can start and stop', () => {
 		const httpWrapper = new HttpWrapper();
 		httpWrapper.start();
-		expect(httpWrapper.server.listening).toBe(true);
+		expect(httpWrapper.isRunning).toBe(true);
 		httpWrapper.stop();
-		expect(httpWrapper.server.listening).toBe(false);
+		expect(httpWrapper.isRunning).toBe(false);
 	});
 	test('Can start and stop with specified port', () => {
 		const httpWrapper = new HttpWrapper();
 		httpWrapper.start(7910);
-		expect(httpWrapper.server.listening).toBe(true);
-		
-		const address = httpWrapper.server.address();
-		if (typeof address === 'string')
-			expect(address).toContain('7910');
-		else expect(address.port).toBe(7910);
-		
+		expect(httpWrapper.isRunning).toBe(true);
+		expect(httpWrapper.usingPort).toBe(7910);
 		httpWrapper.stop();
-		expect(httpWrapper.server.listening).toBe(false);
+		expect(httpWrapper.isRunning).toBe(false);
 	});
 	test('Can start and stop with startup message', async () => {
 		const httpWrapper = new HttpWrapper();

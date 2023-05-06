@@ -27,7 +27,6 @@ export default class HttpWrapper {
 				timeout: false
 			}
 		};
-		
 		this.server = createServer();
 	}
 	
@@ -70,5 +69,20 @@ export default class HttpWrapper {
 				resolve();
 			});
 		});
+	}
+	
+	/** Server running state getter */
+	public get isRunning(): boolean {
+		return this.server.listening;
+	}
+	
+	/** Server listening port getter */
+	public get usingPort(): number {
+		const address = this.server.address();
+		if (address) {
+			if (typeof address === 'string')
+				return parseInt(new URL(address).port);
+			else return address.port;
+		} else return this.config.port;
 	}
 }
