@@ -71,6 +71,11 @@ export default class HttpWrapper {
 		});
 	}
 	
+	/** Add request event listener */
+	public onRequest(fn: (req: InstanceType<typeof Request>, res: InstanceType<typeof Response>) => unknown): void {
+		this.server.addListener('request', fn);
+	}
+	
 	/** Server running state getter */
 	public get isRunning(): boolean {
 		return this.server.listening;

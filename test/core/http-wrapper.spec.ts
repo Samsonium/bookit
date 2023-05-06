@@ -58,4 +58,11 @@ describe('core/HttpWrapper', () => {
 		await httpWrapper.stop(reason);
 		expect(reason).toBe(reason);
 	});
+	test('Method "onRequest" works properly', () => {
+		const httpWrapper = new HttpWrapper();
+		const beforeCount = httpWrapper.server.listenerCount('request');
+		httpWrapper.onRequest(() => []);
+		const afterCount = httpWrapper.server.listenerCount('request');
+		expect(afterCount).toBe(beforeCount + 1);
+	});
 });
