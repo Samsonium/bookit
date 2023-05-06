@@ -1,5 +1,5 @@
-import Logger from '../src/utils/Logger';
-import LogType from '../src/utils/enums/LogType';
+import Logger from '../../src/utils/Logger';
+import LogType from '../../src/utils/enums/LogType';
 
 describe('Logger class', () => {
 	
