@@ -7,7 +7,7 @@ export default class HttpWrapper {
 	
 	public constructor() {
 		this.config = {
-			port: 80,
+			port: 8080,
 			logs: false,
 			requests: {
 				timeout: false,

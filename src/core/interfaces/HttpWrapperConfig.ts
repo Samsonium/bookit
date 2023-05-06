@@ -2,7 +2,7 @@
 /** HttpWrapper class configuration */
 interface HttpWrapperConfig {
 	
-	/** Server port. Default: 80 */
+	/** Server port. Default: 8080 */
 	port: number,
 	
 	/** Should server log requests. Default: false */
