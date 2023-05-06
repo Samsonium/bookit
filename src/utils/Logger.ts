@@ -15,10 +15,11 @@ export default class Logger {
 	}
 	
 	/** Write message to console with specified type */
-	public static out(type: LogType, ...parts: any[]): void {
-		console.log(
+	public static out(type: LogType, ...parts: unknown[]): void {
+		if (parts.length) console.log(
 			Logger.getPrefix(type),
 			...parts
 		);
+		else console.log(Logger.getPrefix(type), '<empty>');
 	}
 }
