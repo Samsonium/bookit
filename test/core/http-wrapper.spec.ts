@@ -2,7 +2,7 @@ import HttpWrapper from '../../src/core/HttpWrapper';
 
 describe('core/HttpWrapper', () => {
 	let spy: jest.SpyInstance;
-	beforeEach(() => (spy = jest.spyOn(console, 'log')));
+	beforeEach(() => (spy = jest.spyOn(console, 'log').mockImplementation(() => {/**/})));
 	afterEach(() => spy.mockRestore());
 	
 	test('Should initialize', () => expect(new HttpWrapper).toBeInstanceOf(HttpWrapper));
