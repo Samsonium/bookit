@@ -18,16 +18,16 @@ export default class HttpWrapper {
 	
 	public constructor(config?: Partial<HttpWrapperConfig>) {
 		this.config = {
-			port: config.port ?? 8080,
-			logs: config.logs ?? false,
+			port: config?.port ?? 8080,
+			logs: config?.logs ?? false,
 			requests: {
-				timeout: config.requests.timeout ?? false,
-				bodyLimit: config.requests.bodyLimit ?? 1048576,
-				caseSensitive: config.requests.caseSensitive ?? true,
-				ignoreTrailingSlash: config.requests.ignoreTrailingSlash ?? false
+				timeout: config?.requests?.timeout ?? false,
+				bodyLimit: config?.requests?.bodyLimit ?? 1048576,
+				caseSensitive: config?.requests?.caseSensitive ?? true,
+				ignoreTrailingSlash: config?.requests?.ignoreTrailingSlash ?? false
 			},
 			response: {
-				timeout: config.response.timeout ?? false
+				timeout: config?.response?.timeout ?? false
 			}
 		};
 		this.server = createServer();
