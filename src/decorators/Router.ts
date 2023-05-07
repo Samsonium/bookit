@@ -1,4 +1,4 @@
-import Metadata from './interfaces/Metadata';
+import Metadata from '../utils/interfaces/Metadata';
 
 /** Creates a new router */
 export default function Router(prefix?: string) {
