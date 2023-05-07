@@ -1,5 +1,5 @@
 import HttpWrapper from '../../src/core/HttpWrapper';
-import HttpWrapperConfig from '../../types/core/interfaces/HttpWrapperConfig';
+import HttpWrapperConfig from '../../src/utils/interfaces/HttpWrapperConfig';
 
 const defaultConfig: HttpWrapperConfig = {
 	port: 8080,
