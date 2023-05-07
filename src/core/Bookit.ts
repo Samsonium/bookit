@@ -15,7 +15,23 @@ export default class Bookit {
 	public constructor(config: Partial<HttpWrapperConfig>);
 	
 	public constructor(config?: Partial<HttpWrapperConfig>) {
-		this.httpWrapper = new HttpWrapper(config);
+		let httpConfig: HttpWrapperConfig = {
+			port: 8080,
+			logs: false,
+			requests: {
+				timeout: false,
+				bodyLimit: 1048576,
+				caseSensitive: true,
+				ignoreTrailingSlash: false
+			},
+			response: {
+				timeout: false
+			}
+		};
+		
+		if (config) httpConfig = Object.assign(httpConfig, config);
+		
+		this.httpWrapper = new HttpWrapper(httpConfig);
 	}
 	
 	/** Define routers */
