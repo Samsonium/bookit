@@ -13,21 +13,26 @@ export default class HttpWrapper {
 	/** NodeJS server instance */
 	public readonly server: Server;
 	
-	public constructor() {
+	public constructor();
+	public constructor(config: Partial<HttpWrapperConfig>);
+	
+	public constructor(config?: Partial<HttpWrapperConfig>) {
 		this.config = {
-			port: 8080,
-			logs: false,
+			port: config.port ?? 8080,
+			logs: config.logs ?? false,
 			requests: {
-				timeout: false,
-				bodyLimit: 1048576,
-				caseSensitive: true,
-				ignoreTrailingSlash: false
+				timeout: config.requests.timeout ?? false,
+				bodyLimit: config.requests.bodyLimit ?? 1048576,
+				caseSensitive: config.requests.caseSensitive ?? true,
+				ignoreTrailingSlash: config.requests.ignoreTrailingSlash ?? false
 			},
 			response: {
-				timeout: false
+				timeout: config.response.timeout ?? false
 			}
 		};
 		this.server = createServer();
+		this.server.requestTimeout = this.config.requests.timeout === false
+			? 0 : this.config.requests.timeout;
 	}
 	
 	/** Launch server */
