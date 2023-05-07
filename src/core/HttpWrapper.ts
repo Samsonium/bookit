@@ -3,7 +3,7 @@ import Logger from '../utils/Logger';
 
 // Types
 import LogType from '../utils/enums/LogType';
-import HttpWrapperConfig from './interfaces/HttpWrapperConfig';
+import HttpWrapperConfig from '../utils/interfaces/HttpWrapperConfig';
 
 export default class HttpWrapper {
 	
