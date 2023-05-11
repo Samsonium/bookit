@@ -1,4 +1,4 @@
-import { createServer, Server } from 'http';
+import { createServer, Server, ServerResponse, IncomingMessage } from 'http';
 import Logger from '../utils/Logger';
 
 // Types
@@ -62,7 +62,7 @@ export default class HttpWrapper {
 	}
 	
 	/** Add request event listener */
-	public onRequest(fn: (req: InstanceType<typeof Request>, res: InstanceType<typeof Response>) => unknown): void {
+	public onRequest(fn: (req: IncomingMessage, res: ServerResponse) => unknown): void {
 		this.server.addListener('request', fn);
 	}
 	

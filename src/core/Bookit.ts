@@ -1,4 +1,4 @@
-import { Server } from 'http';
+import {Server} from 'http';
 import HttpWrapper from './HttpWrapper';
 import HttpWrapperConfig from '../utils/interfaces/HttpWrapperConfig';
 import Metadata from '../utils/interfaces/Metadata';
@@ -59,9 +59,8 @@ export default class Bookit {
 				// Register request
 				this.httpWrapper.onRequest((req, res) => {
 					if (req.method !== path.method) return;
-					
-					const url = new URL(req.url);
-					const urlParts = url.pathname.split('/').filter(Boolean);
+
+					const urlParts = req.url.split('/').filter(Boolean);
 					if (urlParts.length !== pathParts.length) return;
 					
 					const params: {
@@ -83,10 +82,39 @@ export default class Bookit {
 					}
 					
 					// All ok, call method
-					instance[path.executor]({
+					const result = instance[path.executor]({
 						request: { ...req, params: params },
 						response: res
 					});
+
+					res.writeHead(200);
+					switch (typeof result) {
+					case 'object':
+						res.setHeader('Content-Type', 'application/json');
+						res.write(JSON.stringify(result));
+						res.end();
+						break;
+
+					case 'boolean':
+					case 'number':
+					case 'symbol':
+					case 'bigint':
+					case 'string':
+						res.write(String(result));
+						res.end();
+						break;
+
+					case 'function':
+						res.writeHead(500);
+						res.end(() => {
+							throw new Error('Cannot write out function');
+						});
+						break;
+
+					case 'undefined':
+						res.writeHead(200);
+						res.end();
+					}
 				});
 			}
 		}

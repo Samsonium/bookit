@@ -29,7 +29,7 @@ describe('utils/Logger class', () => {
 	});
 	test('Has "out" doesnt write undefined with no message', () => {
 		Logger.out(LogType.error);
-		expect(spy.mock.calls[0][1]).not.toContain('undefined');
+		expect(spy).not.toBeCalledWith('undefined');
 	});
 	test('Has "out" write "<empty>" when no message provided', () => {
 		Logger.out(LogType.error);

@@ -1,6 +1,7 @@
 import Bookit from '../../src/core/Bookit';
 import { Server } from 'http';
 import { Router, Get } from '../../src/decorators';
+import { get } from 'http';
 
 describe('core/Bookit', () => {
 	it('Can initialize', () => expect(new Bookit).toBeInstanceOf(Bookit));
@@ -29,5 +30,30 @@ describe('core/Bookit', () => {
 		
 		kit.addRouters(SomeRouter);
 		expect(kit.server.listenerCount('request')).toBe(1);
+	});
+	it('Server normally responds for base router', (resolve) => {
+		const kit = new Bookit();
+
+		@Router()
+		class BaseRouter {
+
+			@Get()
+			helloWorld() {
+				return '<h1>Hello, World!</h1>';
+			}
+		}
+
+		kit.addRouters(BaseRouter);
+		kit.start(7910).then(() => {
+			get(new URL('http://localhost:7910/'), (res) => {
+				let data = '';
+
+				res.on('data', chunk => data += chunk);
+				res.on('end', () => {
+					expect(data).toBe('<h1>Hello, World!</h1>');
+					kit.stop().then(resolve);
+				});
+			}).on('error', () => kit.stop().then(resolve));
+		});
 	});
 });
