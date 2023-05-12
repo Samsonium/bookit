@@ -7,5 +7,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: ./.github/workflows/reusable/deploy_docs.yml
-      - uses: ./.github/workflows/reusable/deploy_npm.yml
+      - uses: ./.github/workflows/reusable/deploy_docs
+      - uses: ./.github/workflows/reusable/deploy_npm
