@@ -2,7 +2,6 @@ import HttpWrapper from '../../src/core/HttpWrapper';
 import HttpWrapperConfig from '../../src/utils/interfaces/HttpWrapperConfig';
 
 const defaultConfig: HttpWrapperConfig = {
-	port: 8080,
 	logs: false,
 	requests: {
 		timeout: false,
@@ -31,7 +30,6 @@ describe('core/HttpWrapper', () => {
 		const httpWrapper = new HttpWrapper(defaultConfig);
 		
 		// Common config
-		expect(httpWrapper.config.port).toBe(8080);
 		expect(httpWrapper.config.logs).toBe(false);
 		
 		// Requests config

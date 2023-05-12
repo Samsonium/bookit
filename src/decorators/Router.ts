@@ -1,6 +1,9 @@
 import Metadata from '../utils/interfaces/Metadata';
 
-/** Creates a new router */
+/**
+ * Creates a new router
+ * @param prefix Router prefix pathname in URL
+ */
 export default function Router(prefix?: string) {
 	return <T extends { new(...args: any[]): any }>(base: T) => {
 		return class extends base {

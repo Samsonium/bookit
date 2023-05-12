@@ -31,7 +31,7 @@ export default class HttpWrapper {
 	
 	public start(port?: number, startup?: string) {
 		return new Promise<void>((resolve, reject) => {
-			const startOnPort = port ?? this.config.port;
+			const startOnPort = port ?? 8080;
 			const onStartup = () => {
 				if (startup) Logger.out(LogType.info, startup);
 				resolve();
@@ -78,6 +78,6 @@ export default class HttpWrapper {
 			if (typeof address === 'string')
 				return parseInt(new URL(address).port);
 			else return address.port;
-		} else return this.config.port;
+		} else return 8080;
 	}
 }

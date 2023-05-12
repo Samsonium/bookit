@@ -16,7 +16,6 @@ export default class Bookit {
 	
 	public constructor(config?: Partial<HttpWrapperConfig>) {
 		let httpConfig: HttpWrapperConfig = {
-			port: 8080,
 			logs: false,
 			requests: {
 				timeout: false,
@@ -34,8 +33,11 @@ export default class Bookit {
 		this.httpWrapper = new HttpWrapper(httpConfig);
 	}
 	
-	/** Define routers */
-	public addRouters(...routers: { new(...args: any[]): any }[]): void {
+	/**
+	 * Define routers
+	 * @param routers Routers to be active
+	 */
+	public addRouters(...routers: FakeClass[]): void {
 		for (const router of routers) {
 			const instance = new router();
 			const meta = instance.meta as Metadata;
@@ -64,18 +66,14 @@ export default class Bookit {
 					if (urlParts.length !== pathParts.length) return;
 					
 					const params: {
-						name: string,
-						value: string,
-					}[] = [];
+						[name: string]: string,
+					} = {};
 					
 					for (let i = 0; i < urlParts.length; i++) {
 						const inUrl = urlParts[i];
 						const inPath = pathParts[i];
 						if (inPath.startsWith(':')) {
-							params.push({
-								name: inPath.substring(1),
-								value: inUrl
-							});
+							params[inPath.substring(1)] = inUrl;
 							continue;
 						}
 						if (inUrl !== inPath) return;
@@ -83,7 +81,7 @@ export default class Bookit {
 					
 					// All ok, call method
 					const result = instance[path.executor]({
-						request: { ...req, params: params },
+						request: { ...req, params },
 						response: res
 					});
 
