@@ -33,7 +33,10 @@ export default class Bookit {
 		this.httpWrapper = new HttpWrapper(httpConfig);
 	}
 	
-	/** Define routers */
+	/**
+	 * Define routers
+	 * @param routers Routers to be active
+	 */
 	public addRouters(...routers: FakeClass[]): void {
 		for (const router of routers) {
 			const instance = new router();

@@ -26,7 +26,11 @@ export default class Logger {
 		return `[${date}][${typePrefix}]:`;
 	}
 	
-	/** Write message to console with specified type */
+	/**
+	 * Write message to console with specified type
+	 * @param type Output message type
+	 * @param parts Message parts
+	 */
 	public static out(type: LogType, ...parts: unknown[]): void {
 		if (parts.length) console.log(
 			Logger.getPrefix(type),
