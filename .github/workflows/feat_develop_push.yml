@@ -8,5 +8,5 @@ jobs:
     steps:
       - uses: actions/checkout@v3
   test:
-    uses: ./.github/workflows/reusable/test.yml
+    uses: ./.github/workflows/test.yml
     needs: checkout

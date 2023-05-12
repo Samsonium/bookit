@@ -8,8 +8,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
   deploy_docs:
-    uses: ./.github/workflows/reusable/deploy_docs.yml
+    uses: ./.github/workflows/deploy_docs.yml
     needs: checkout
   deploy_npm:
-    uses: ./.github/workflows/reusable/deploy_npm.yml
+    uses: ./.github/workflows/deploy_npm.yml
     needs: deploy_docs
