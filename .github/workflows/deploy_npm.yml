@@ -11,11 +11,12 @@ jobs:
         with:
           node-version: '16.x'
           registry-url: 'https://registry.npmjs.org'
+          scope: '@smsnm'
       - name: Install dependencies
         run: npm ci
       - name: Build project
         run: npm run build
       - name: Publish to NPM
-        uses: JS-DevTools/npm-publish@v2
-        with:
-          token: ${{ secrets.NPM_TOKEN }}
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
