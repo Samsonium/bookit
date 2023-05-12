@@ -6,5 +6,6 @@ jobs:
   exec:
     runs-on: ubuntu-latest
     steps:
-      - uses: ./reusable/deploy_docs.yml
-      - uses: ./reusable/deploy_npm.yml
+      - uses: actions/checkout@v3
+      - uses: ./.github/workflows/reusable/deploy_docs.yml
+      - uses: ./.github/workflows/reusable/deploy_npm.yml
