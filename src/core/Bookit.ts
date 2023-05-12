@@ -66,18 +66,14 @@ export default class Bookit {
 					if (urlParts.length !== pathParts.length) return;
 					
 					const params: {
-						name: string,
-						value: string,
-					}[] = [];
+						[name: string]: string,
+					} = {};
 					
 					for (let i = 0; i < urlParts.length; i++) {
 						const inUrl = urlParts[i];
 						const inPath = pathParts[i];
 						if (inPath.startsWith(':')) {
-							params.push({
-								name: inPath.substring(1),
-								value: inUrl
-							});
+							params[inPath.substring(1)] = inUrl;
 							continue;
 						}
 						if (inUrl !== inPath) return;
@@ -85,7 +81,7 @@ export default class Bookit {
 					
 					// All ok, call method
 					const result = instance[path.executor]({
-						request: { ...req, params: params },
+						request: { ...req, params },
 						response: res
 					});
 
