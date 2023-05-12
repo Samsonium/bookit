@@ -3,8 +3,10 @@ on:
   push:
     branches: [ develop ]
 jobs:
-  exec:
+  checkout:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: ./.github/workflows/reusable/test
+  test:
+    uses: ./.github/workflows/reusable/test.yml
+    needs: checkout

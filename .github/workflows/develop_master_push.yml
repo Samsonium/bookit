@@ -3,9 +3,13 @@ on:
   push:
     branches: [ master ]
 jobs:
-  exec:
+  checkout:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: ./.github/workflows/reusable/deploy_docs
-      - uses: ./.github/workflows/reusable/deploy_npm
+  deploy_docs:
+    uses: ./.github/workflows/reusable/deploy_docs.yml
+    needs: checkout
+  deploy_npm:
+    uses: ./.github/workflows/reusable/deploy_npm.yml
+    needs: deploy_docs
