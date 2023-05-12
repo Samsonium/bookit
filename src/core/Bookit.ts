@@ -34,7 +34,7 @@ export default class Bookit {
 	}
 	
 	/** Define routers */
-	public addRouters(...routers: { new(...args: any[]): any }[]): void {
+	public addRouters(...routers: FakeClass[]): void {
 		for (const router of routers) {
 			const instance = new router();
 			const meta = instance.meta as Metadata;

@@ -2,7 +2,7 @@ import Metadata from '../utils/interfaces/Metadata';
 
 /** Creates a new router */
 export default function Router(prefix?: string) {
-	return <T extends { new(...args: any[]): any }>(base: T) => {
+	return <T extends FakeClass>(base: T) => {
 		return class extends base {
 			public meta: Metadata;
 			
