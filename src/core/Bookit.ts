@@ -16,7 +16,6 @@ export default class Bookit {
 	
 	public constructor(config?: Partial<HttpWrapperConfig>) {
 		let httpConfig: HttpWrapperConfig = {
-			port: 8080,
 			logs: false,
 			requests: {
 				timeout: false,
