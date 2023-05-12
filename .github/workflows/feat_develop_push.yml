@@ -1,0 +1,9 @@
+name: Feature -> Develop CI
+on:
+  push:
+    branches: [ develop ]
+jobs:
+  exec:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: ./reusable/test.yml

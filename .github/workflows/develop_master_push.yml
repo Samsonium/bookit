@@ -1,0 +1,10 @@
+name: Develop -> Master Push CI
+on:
+  push:
+    branches: [ master ]
+jobs:
+  exec:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: ./reusable/deploy_docs.yml
+      - uses: ./reusable/deploy_npm.yml
