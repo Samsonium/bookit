@@ -1,0 +1,77 @@
+name: Deploy docs and npm package
+
+on:
+  push:
+    branches: [ master ]
+
+concurrency:
+  group: 'pages'
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  check:
+    name: Check code
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16.x'
+      - name: Install deps
+        run: npm ci
+      - name: Test project
+        run: npm run test
+      - name: Lint
+        run: npm run lint
+
+  docs:
+    name: Deploy documentation
+    runs-on: ubuntu-latest
+    needs: check
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+      - name: Install deps
+        run: npm ci
+      - name: Build docs
+        run: npm run docs
+      - name: Setup GitHub Pages
+        uses: actions/configure-pages@v3
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: './pages'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2
+
+  npm:
+    name: Publish NPM package
+    runs-on: ubuntu-latest
+    needs: check
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16.x'
+      - name: Install deps
+        run: npm ci
+      - name: Build project
+        run: npm run build
+      - name: Publish
+        run: npm publish --access=public --scope=@smsnm
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
