@@ -43,15 +43,8 @@ The main point is to use decorators to automatically declare routers and paths.
 5. Run!
 
 ### Documentation
-Documentation is under development...
+Documentation can be found at: https://samsonium.github.io/bookit/
+This is a temporary documentation, which, in the future, will be replaced by the normal 🙃
 
 ### Contributing
 Contribution guide is under development...
-
-### Version history
-- v0.1.0:
-  - New REST decorators: `Get`, `Post`, `Put`, `Patch`, `Delete`
-  - Router decorator to define class as router
-  - Http NodeJS library wrapper class
-  - Common class: Bookit
-  - Logger utils (class with static method `out`)
