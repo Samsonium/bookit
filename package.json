@@ -5,10 +5,11 @@
   "license": "MIT",
   "private": false,
   "description": "BOOKit (Backend Object Oriented Kit) is a strongly typed backend framework based on OOP principles",
-  "main": "lib/index.js",
-  "types": "types/index.d.ts",
+  "main": "./lib/index.js",
+  "types": "./types/index.d.ts",
   "files": [
-    "lib/*"
+    "lib/*",
+    "types/*"
   ],
   "keywords": [
     "backend",
@@ -23,6 +24,11 @@
     "ts",
     "typescript"
   ],
+  "typesVersions": {
+    "<5.0": {
+      "*": ["./types/*"]
+    }
+  },
   "scripts": {
     "docs": "typedoc src --out pages --readme README.md && mkdir ./pages/docs && cp docs/Logotype.png pages/docs/Logotype.png",
     "test": "jest --config jest.config.json",
