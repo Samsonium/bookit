@@ -1,6 +1,9 @@
 ![BOOKit Logotype](./docs/Logotype.png)
 
-[![npm version](https://badge.fury.io/js/@smsnm%2Fbookit.svg)](https://badge.fury.io/js/@smsnm%2Fbookit)
+[![](https://img.shields.io/npm/v/@smsnm/bookit)](https://www.npmjs.com/package/@smsnm/bookit)
+![](https://github.com/samsonium/bookit/actions/workflows/deploy.yml/badge.svg)
+![](https://snyk.io/test/github/samsoniunm/bookit/badge.svg)
+
 
 ### Description
 This project will allow you to quickly set up backend services in TypeScript. 
