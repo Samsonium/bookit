@@ -14,14 +14,15 @@ function fetch(path: URL): Promise<any> {
 
 describe('Core', () => {
 	let kit: Bookit;
-	beforeEach(() => kit = new Bookit);
-	afterEach(() => kit.stop());
+	afterEach(() => kit?.stop());
 
 	it('Can instantiate', () => expect(new Bookit).toBeInstanceOf(Bookit));
 	it('http.Server can instantiate', () => {
+		kit = new Bookit;
 		expect(kit.server).toBeInstanceOf(Server);
 	});
 	it('Should routers can be added', () => {
+		kit = new Bookit;
 		expect(kit.server.listenerCount('request')).toBe(0);
 
 		@Router()
@@ -44,6 +45,7 @@ describe('Core', () => {
 			}
 		}
 
+		kit = new Bookit;
 		kit.addRouters(R);
 		kit.start(7915).then(() => {
 			fetch(new URL('http://localhost:7915/')).then(data => {
@@ -63,6 +65,7 @@ describe('Core', () => {
 			}
 		}
 
+		kit = new Bookit;
 		kit.addRouters(R);
 		kit.start(7916).then(() => {
 			fetch(new URL(`/hello/${testName}`, 'http://localhost:7916')).then(data => {
@@ -74,10 +77,41 @@ describe('Core', () => {
 	it('Server stops with specified reason', done => {
 		const spy = jest.spyOn(console, 'log').mockImplementation(() => {/**/});
 
+		kit = new Bookit;
 		kit.start(7992);
 		kit.stop('Stopped').then(() => {
 			expect(spy.mock.lastCall[1]).toContain('Stopped');
 			spy.mockRestore();
+			done();
+		});
+	});
+	it('Can main class log registered paths', done => {
+		const spy = jest.spyOn(console, 'log').mockImplementation(() => {/**/});
+
+		@Router()
+		class R {
+
+			@Get('test-route')
+			test() {/**/}
+		}
+
+		kit = new Bookit({
+			logs: true
+		});
+		kit.addRouters(R);
+		kit.start(7922).then(() => {
+			expect(spy.mock.calls[0].join(' ')).toContain('test-route');
+			done();
+		});
+	});
+	it('Whether a message is displayed in the log if there are no registered paths', done => {
+		const spy = jest.spyOn(console, 'log').mockImplementation(() => {/**/});
+
+		kit = new Bookit({
+			logs: true
+		});
+		kit.start(7921).then(() => {
+			expect(spy.mock.calls[0].join(' ')).toContain('No routes are registered');
 			done();
 		});
 	});

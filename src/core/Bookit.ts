@@ -1,13 +1,13 @@
-import { Server } from 'http';
-import HttpWrapper from './HttpWrapper';
-import HttpWrapperConfig from '../utils/interfaces/HttpWrapperConfig';
-import Metadata from '../utils/interfaces/Metadata';
-import Logger from '../utils/Logger';
-import LogType from '../utils/enums/LogType';
-import * as path from 'path';
+import { Server } from "http";
+import HttpWrapper from "./HttpWrapper";
+import HttpWrapperConfig from "../utils/interfaces/HttpWrapperConfig";
+import Metadata from "../utils/interfaces/Metadata";
+import Logger from "../utils/Logger";
+import LogType from "../utils/enums/LogType";
 
 /** BOOKit server class */
 export default class Bookit {
+	private readonly routes: string[];
 
 	/** HttpWrapper instance */
 	public readonly httpWrapper: HttpWrapper;
@@ -30,8 +30,8 @@ export default class Bookit {
 		};
 
 		if (config) httpConfig = Object.assign(httpConfig, config);
-
 		this.httpWrapper = new HttpWrapper(httpConfig);
+		this.routes = [];
 	}
 
 	/**
@@ -84,8 +84,10 @@ export default class Bookit {
 	 * @private
 	 */
 	private makeRouteHandler(path: Metadata['paths'][number], router: any): void {
-		const expected = this.prepareRoutePath(router.meta.prefix, path.path)
-			.split('/').filter(Boolean);
+		const prepared = this.prepareRoutePath(router.meta.prefix, path.path);
+		this.routes.push(prepared);
+
+		const expected = prepared.split('/').filter(Boolean);
 
 		// Register request
 		this.httpWrapper.onRequest((req, res) => {
@@ -133,6 +135,13 @@ export default class Bookit {
 	public start(port: number): Promise<void>;
 
 	public async start(port?: number): Promise<void> {
+		if (this.httpWrapper.config.logs) {
+			if (this.routes.length) {
+				const result = this.routes.join('\n- ');
+				Logger.out(LogType.info, 'Registered routes:', '\n -' + result);
+			} else Logger.out(LogType.info, 'No routes are registered');
+		}
+
 		await this.httpWrapper.start(port);
 	}
 
