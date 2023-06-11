@@ -19,38 +19,19 @@ export default class HttpWrapper {
 		this.server.requestTimeout = this.config.requests.timeout === false
 			? 0 : this.config.requests.timeout;
 	}
-	
-	/** Launch server */
-	public start(): Promise<void>;
-	
-	/** Launch server on specified port */
-	public start(port: number): Promise<void>;
-	
-	/** Launch server on specified port and write message */
-	public start(port: number, startup: string): Promise<void>;
-	
-	public start(port?: number, startup?: string) {
+
+	public start(port?: number) {
 		return new Promise<void>((resolve, reject) => {
 			const startOnPort = port ?? 8080;
-			const onStartup = () => {
-				if (startup) Logger.out(LogType.info, startup);
-				resolve();
-			};
 			
 			try {
-				this.server.listen(startOnPort, onStartup);
+				this.server.listen(startOnPort, resolve.bind(this));
 			} catch (e) {
-				Logger.out(LogType.error, 'Server stopped. Reason:', e.message ?? 'not provided\n', e);
+				Logger.out(LogType.error, 'Server stopped. Reason:', e.message ?? 'N/A\n', e);
 				reject();
 			}
 		});
 	}
-	
-	/** Stop server */
-	public stop(): Promise<void>;
-	
-	/** Stop server and write to console message */
-	public stop(reason: string): Promise<void>;
 	
 	public stop(reason?: string) {
 		return new Promise<void>(resolve => {
