@@ -63,18 +63,7 @@ export default class Bookit {
 		prefix = prefix.trim();
 		pathname = pathname.trim();
 
-		// Check for start slash
-		if (!/\/(.+)?/.test(prefix))
-			prefix = '/' + prefix;
-
-		// Check for trailing slash
-		if (/.+\//.test(prefix)) {
-			if (/\/(.+)?/.test(pathname))
-				pathname = pathname.substring(0, pathname.length - 1);
-			else pathname = '/' + pathname;
-		}
-
-		return '/' + (prefix + pathname).split('/').filter(Boolean).join('/');
+		return '/' + (prefix + '/' + pathname).split('/').filter(Boolean).join('/');
 	}
 
 	/**
