@@ -21,11 +21,6 @@ export default class HttpWrapper {
 	}
 
 	public start(port?: number) {
-		this.onRequest((req, res) => {
-			res.statusCode = 404;
-			res.end();
-		});
-
 		return new Promise<void>((resolve, reject) => {
 			const startOnPort = port ?? 8080;
 			
