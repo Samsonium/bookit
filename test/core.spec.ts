@@ -16,7 +16,6 @@ describe('Core', () => {
 	let kit: Bookit;
 	afterEach(() => {
 		kit?.stop();
-		kit = null;
 	});
 
 	it('Can instantiate', () => expect(new Bookit).toBeInstanceOf(Bookit));
