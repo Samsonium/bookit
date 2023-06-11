@@ -2,9 +2,14 @@ import { default as Bookit, Router, Get } from '../src/index';
 import { Server } from 'http';
 import { get } from 'http';
 
-function fetch(path: URL): Promise<any> {
+function fetch(path: URL, headers?: { [n: string]: string }): Promise<any> {
 	return new Promise(r => {
-		get(path, res => {
+		get({
+			method: 'GET',
+			port: path.port,
+			path: path.toString(),
+			headers: headers ?? {}
+		}, res => {
 			let data = '';
 			res.on('data', chunk => data += chunk);
 			res.on('end', () => r(data || res.statusCode));
@@ -25,7 +30,7 @@ describe('Core', () => {
 	});
 	it('Should routers can be added', () => {
 		kit = new Bookit;
-		expect(kit.server.listenerCount('request')).toBe(0);
+		expect(kit.listenerCount).toBe(0);
 
 		@Router()
 		class R {
@@ -34,7 +39,7 @@ describe('Core', () => {
 		}
 
 		kit.addRouters(R);
-		expect(kit.server.listenerCount('request')).toBe(1);
+		expect(kit.listenerCount).toBe(1);
 	});
 	it('Server normally responds for base route', (done) => {
 		const testString = 'Hello, World!';
@@ -148,6 +153,28 @@ describe('Core', () => {
 					expect(data).toBe(404);
 					done();
 				});
+			});
+		});
+	});
+	it('Should cookie parsing works properly', done => {
+		kit = new Bookit();
+
+		@Router()
+		class R {
+
+			@Get()
+			h({ request }) {
+				return request.cookie.sent;
+			}
+		}
+
+		kit.addRouters(R);
+		kit.start(7919).then(() => {
+			fetch(new URL('http://localhost:7919'), {
+				Cookie: 'sent=Hello'
+			}).then(data => {
+				expect(data).toBe('Hello');
+				done();
 			});
 		});
 	});
