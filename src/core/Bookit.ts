@@ -1,9 +1,9 @@
-import { Server } from "http";
-import HttpWrapper from "./HttpWrapper";
-import HttpWrapperConfig from "../utils/interfaces/HttpWrapperConfig";
-import Metadata from "../utils/interfaces/Metadata";
-import Logger from "../utils/Logger";
-import LogType from "../utils/enums/LogType";
+import { Server } from 'http';
+import HttpWrapper from './HttpWrapper';
+import HttpWrapperConfig from '../utils/interfaces/HttpWrapperConfig';
+import Metadata from '../utils/interfaces/Metadata';
+import Logger from '../utils/Logger';
+import LogType from '../utils/enums/LogType';
 
 /** BOOKit server class */
 export default class Bookit {
@@ -74,7 +74,7 @@ export default class Bookit {
 			else pathname = '/' + pathname;
 		}
 
-		return prefix + pathname;
+		return '/' + (prefix + pathname).split('/').filter(Boolean).join('/');
 	}
 
 	/**
@@ -158,5 +158,15 @@ export default class Bookit {
 	/** http.Server instance getter */
 	public get server(): Server {
 		return this.httpWrapper.server;
+	}
+
+	/** Server running state */
+	public get isRunning(): boolean {
+		return this.httpWrapper.isRunning;
+	}
+
+	/** Using port */
+	public get port(): number {
+		return this.httpWrapper.usingPort;
 	}
 }

@@ -7,14 +7,17 @@ function fetch(path: URL): Promise<any> {
 		get(path, res => {
 			let data = '';
 			res.on('data', chunk => data += chunk);
-			res.on('end', () => r(data));
+			res.on('end', () => r(data || res.statusCode));
 		});
 	});
 }
 
 describe('Core', () => {
 	let kit: Bookit;
-	afterEach(() => kit?.stop());
+	afterEach(() => {
+		kit?.stop();
+		kit = null;
+	});
 
 	it('Can instantiate', () => expect(new Bookit).toBeInstanceOf(Bookit));
 	it('http.Server can instantiate', () => {
@@ -101,6 +104,7 @@ describe('Core', () => {
 		kit.addRouters(R);
 		kit.start(7922).then(() => {
 			expect(spy.mock.calls[0].join(' ')).toContain('test-route');
+			spy.mockRestore();
 			done();
 		});
 	});
@@ -112,7 +116,40 @@ describe('Core', () => {
 		});
 		kit.start(7921).then(() => {
 			expect(spy.mock.calls[0].join(' ')).toContain('No routes are registered');
+			spy.mockRestore();
 			done();
+		});
+	});
+	it('Should 404 work', done => {
+		kit = new Bookit();
+		kit.start(7924).then(() => {
+			fetch(new URL('http://localhost:7924')).then(data => {
+				expect(data).toBe(404);
+				done();
+			});
+		});
+	});
+	it('Should 404 work with defined routes', done => {
+		kit = new Bookit();
+
+		@Router()
+		class R {
+
+			@Get()
+			hello() {
+				return 'Hello, World!';
+			}
+		}
+
+		kit.addRouters(R);
+		kit.start(7953).then(() => {
+			fetch(new URL('http://localhost:7953')).then(data => {
+				expect(data).toBe('Hello, World!');
+				fetch(new URL('/abc', 'http://localhost:7953')).then(data => {
+					expect(data).toBe(404);
+					done();
+				});
+			});
 		});
 	});
 });
