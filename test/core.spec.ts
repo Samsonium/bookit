@@ -71,4 +71,14 @@ describe('Core', () => {
 			});
 		});
 	});
+	it('Server stops with specified reason', done => {
+		const spy = jest.spyOn(console, 'log').mockImplementation(() => {/**/});
+
+		kit.start(7992);
+		kit.stop('Stopped').then(() => {
+			expect(spy.mock.lastCall[1]).toContain('Stopped');
+			spy.mockRestore();
+			done();
+		});
+	});
 });
