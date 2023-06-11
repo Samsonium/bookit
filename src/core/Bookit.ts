@@ -1,13 +1,15 @@
-import { Server } from 'http';
-import HttpWrapper from './HttpWrapper';
 import HttpWrapperConfig from '../utils/interfaces/HttpWrapperConfig';
+import RequestHandler from '../utils/interfaces/RequestHandler';
 import Metadata from '../utils/interfaces/Metadata';
-import Logger from '../utils/Logger';
 import LogType from '../utils/enums/LogType';
+import HttpWrapper from './HttpWrapper';
+import Logger from '../utils/Logger';
+import { Server } from 'http';
 
 /** BOOKit server class */
 export default class Bookit {
 	private readonly routes: string[];
+	private readonly handlers: RequestHandler[];
 
 	/** HttpWrapper instance */
 	public readonly httpWrapper: HttpWrapper;
@@ -32,6 +34,7 @@ export default class Bookit {
 		if (config) httpConfig = Object.assign(httpConfig, config);
 		this.httpWrapper = new HttpWrapper(httpConfig);
 		this.routes = [];
+		this.handlers = [];
 	}
 
 	/**
@@ -79,41 +82,53 @@ export default class Bookit {
 		const expected = prepared.split('/').filter(Boolean);
 
 		// Register request
-		this.httpWrapper.onRequest((req, res) => {
-			if (req.method !== path.method) return;
+		this.handlers.push({
+			path: prepared,
+			method: path.method,
+			handler: async (req, res) => {
+				const got = (new URL(req.url)).pathname.split('/').filter(Boolean);
 
-			// Get requested pathname
-			const got = req.url.split('/').filter(Boolean);
-			if (got.length !== expected.length) return;
+				// Create params list
+				const params: {
+					[name: string]: string,
+				} = {};
 
-			// Create params list
-			const params: {
-				[name: string]: string,
-			} = {};
+				for (let i = 0; i < got.length; i++) {
+					if (!expected[i].startsWith(':') && got[i] !== expected[i]) return;
+					else if (expected[i].startsWith(':'))
+						params[expected[i].substring(1)] = got[i];
+				}
 
-			for (let i = 0; i < got.length; i++) {
-				if (!expected[i].startsWith(':') && got[i] !== expected[i]) return;
-				else if (expected[i].startsWith(':'))
-					params[expected[i].substring(1)] = got[i];
+				// Extract cookies
+				const cookie: {
+					[name: string]: string
+				} = {};
+				if (req.headers.cookie) {
+					const receivedCookie = req.headers.cookie.split(';')?.filter(Boolean)?.map(c => c.trim());
+					for (const c of receivedCookie ?? []) {
+						const data = c.split('=').map(item => item.trim());
+						cookie[data[0]] = data[1];
+					}
+				}
+
+				// All ok, call method
+				const result = router[path.executor]({
+					request: { ...req, params, cookie },
+					response: res,
+				});
+
+				// Set status if not set
+				if (!res.statusCode)
+					res.statusCode = 200;
+
+				// Check for handler returned value type
+				if (typeof result === 'object') {
+					res.setHeader('Content-Type', 'application/json');
+					res.end(JSON.stringify(result));
+				} else if (typeof result === 'function') {
+					throw new Error('Cannot write out function');
+				} else res.end(result);
 			}
-
-			// All ok, call method
-			const result = router[path.executor]({
-				request: { ...req, params },
-				response: res,
-			});
-
-			// Set status if not set
-			if (!res.statusCode)
-				res.statusCode = 200;
-
-			// Check for handler returned value type
-			if (typeof result === 'object') {
-				res.setHeader('Content-Type', 'application/json');
-				res.end(JSON.stringify(result));
-			} else if (typeof result === 'function') {
-				throw new Error('Cannot write out function');
-			} else res.end(result);
 		});
 	}
 
@@ -124,6 +139,26 @@ export default class Bookit {
 	public start(port: number): Promise<void>;
 
 	public async start(port?: number): Promise<void> {
+		this.httpWrapper.onRequest(async (req, res) => {
+			let found: RequestHandler['handler'] = null;
+
+			for (const h of this.handlers) {
+				const { method, path, handler } = h;
+				const expected = path.split('/').filter(Boolean);
+				const got = (new URL(req.url)).pathname.split('/').filter(Boolean);
+				if (method !== req.method || got.length !== expected.length)
+					continue;
+
+				found = handler;
+			}
+
+			if (found) await found(req, res);
+			else {
+				res.statusCode = 404;
+				res.end();
+			}
+		});
+
 		if (this.httpWrapper.config.logs) {
 			if (this.routes.length) {
 				const result = this.routes.join('\n- ');
@@ -157,5 +192,10 @@ export default class Bookit {
 	/** Using port */
 	public get port(): number {
 		return this.httpWrapper.usingPort;
+	}
+
+	/** Get listeners count */
+	public get listenerCount(): number {
+		return this.handlers.length;
 	}
 }
