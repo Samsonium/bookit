@@ -126,14 +126,24 @@ export default class Bookit {
 		});
 	}
 
-	/** Start server */
-	public get start(): HttpWrapper['start'] {
-		return this.httpWrapper.start;
+	/** Start the server */
+	public start(): Promise<void>;
+
+	/** Start the server on specified port */
+	public start(port: number): Promise<void>;
+
+	public async start(port?: number): Promise<void> {
+		await this.httpWrapper.start(port);
 	}
 
-	/** Stop server */
-	public get stop(): HttpWrapper['stop'] {
-		return this.httpWrapper.stop;
+	/** Stop the server */
+	public async stop(): Promise<void>;
+
+	/** Stop the server with specified reason */
+	public async stop(reason: string): Promise<void>;
+
+	public async stop(reason?: string) {
+		await this.httpWrapper.stop(reason);
 	}
 
 	/** http.Server instance getter */
