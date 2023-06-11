@@ -2,8 +2,6 @@ name: PR Develop to Master
 on:
   pull_request:
     branches: [ master ]
-  push:
-    branches: [ develop ]
 jobs:
   check:
     name: Check code

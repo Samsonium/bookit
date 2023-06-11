@@ -3,7 +3,7 @@
 interface Metadata {
 	prefix: string,
 	paths: {
-		method: string,
+		method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE',
 		path: string,
 		executor: string | symbol
 	}[]

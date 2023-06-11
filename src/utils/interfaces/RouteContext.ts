@@ -6,7 +6,7 @@ import { IncomingMessage, ServerResponse } from 'http';
 interface RouteContext {
 
   /** Request info */
-  request: {
+  request: IncomingMessage & {
     
     /**
      * Parameters in URL
@@ -14,8 +14,15 @@ interface RouteContext {
      */
     params: {
       [parameter: string]: string
+    },
+
+    /**
+     * Cookies in request
+     */
+    cookie: {
+      [name: string]: string
     }
-  } & IncomingMessage
+  }
   
   /** Response features */
   response: ServerResponse
